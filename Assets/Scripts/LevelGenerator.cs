@@ -36,7 +36,6 @@ public class LevelGenerator : MonoBehaviour
         int newChunksSpawned = totalSpawnedChunks - chunkCount;  // How many chunks we've spawned, minus the initial ones.
         float distanceFromStartPosition = Mathf.Abs(initialPositionTarget - target.position.y);  // How far the target has moved from the start position in total.
         targetDistanceSinceLastChunk = distanceFromStartPosition - (newChunksSpawned * chunkHeight);
-        Debug.Log(targetDistanceSinceLastChunk);
 
         if (targetDistanceSinceLastChunk >= chunkHeight) {
             SpawnChunk();

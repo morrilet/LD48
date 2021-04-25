@@ -24,6 +24,10 @@ public class CharacterController_Platformer : MonoBehaviour
     [SerializeField, Range(2, 64)] int verticalRaycastCount = 2;  // The number of rays to cast from the top / bottom of the controller.
     [SerializeField, Range(2, 64)] int horizontalRaycastCount = 2;  // The number of rays to case from the left / right of the controller.
 
+    [Space, Header("Animation")]
+    [SerializeField] GameObject playerSpriteObj;
+    [SerializeField] Animator characterAnimator;
+
     [Space, Header("Debugging")]
 
     [SerializeField] bool debug;
@@ -42,6 +46,7 @@ public class CharacterController_Platformer : MonoBehaviour
     bool wallSliding;
     float wallSlideDirection;  // -1 or 1, depending on the direction we were moving when we initiated the slide.
     float currentTerminalVelocity;
+    float currentDirection = 1;
 
     private void Awake()
     {
@@ -107,8 +112,8 @@ public class CharacterController_Platformer : MonoBehaviour
             currentTerminalVelocity = terminalSlideVelocity;
         }
 
-        // Stop wall sliding if we move away from the wall.
-        if (storedVelocity.x != 0 && Mathf.Sign(storedVelocity.x) != wallSlideDirection && wallSliding)
+        // Stop wall sliding if we're not touching the wall.
+        if (!touchingWall && wallSliding)
             wallSliding = false;
 
         // Stop wall sliding if we touch the ground.
@@ -118,9 +123,12 @@ public class CharacterController_Platformer : MonoBehaviour
         if (wallSliding) {
             float slideGravityPercent = Mathf.Clamp01(slideVelocityFalloffTimer / slideVelocityScaleDuration);
             currentTerminalVelocity = Mathf.Lerp(
-                terminalSlideVelocity, terminalVelocity, 
+                terminalSlideVelocity, terminalVelocity,
                 slideVelocityScaleFalloff.Evaluate(slideGravityPercent)
             );
+
+            // Apply a small amount of velocity towards the wall to keep `touchingWall` accurate.
+            velocity.x = wallSlideDirection * 0.01f;
 
             slideVelocityFalloffTimer += Time.deltaTime;
             
@@ -130,7 +138,7 @@ public class CharacterController_Platformer : MonoBehaviour
             currentTerminalVelocity = terminalVelocity;
         }
 # endregion
-            
+        
         velocity += TryMoveDirection(input.movementInput.x);
         velocity += TryJump(input.jumpButtonDown);
         velocity += ApplyGravity();
@@ -140,6 +148,22 @@ public class CharacterController_Platformer : MonoBehaviour
 
         storedVelocity = velocity;
         storedHits = hits;
+
+        UpdateAnimator();
+    }
+
+    private void UpdateAnimator() {
+        // Animate the character based on state. Triggers are set elsewhere.
+        characterAnimator.SetFloat("Speed", Mathf.Abs(storedVelocity.x));
+        characterAnimator.SetBool("InAir", inAir);
+        characterAnimator.SetBool("WallSliding", wallSliding);
+
+        // Flip the character based on movement direction.
+        if (storedVelocity.x != 0)
+            currentDirection = Mathf.Sign(storedVelocity.x);
+        Vector3 scale = playerSpriteObj.transform.localScale;
+        scale.x = currentDirection;
+        playerSpriteObj.transform.localScale = scale;
     }
 
     // Create a velocity vector containing input-based movement along the Y-axis.
@@ -151,6 +175,7 @@ public class CharacterController_Platformer : MonoBehaviour
             // State stuff.
             jumping = true;
             jumpGravityFalloffTimer = 0.0f;
+            characterAnimator.SetTrigger("Jump");
         }
         return velocity;
     }
