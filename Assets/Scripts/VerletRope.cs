@@ -10,6 +10,7 @@ public class VerletRope : MonoBehaviour
     [Header("Targeting")]
     [SerializeField] Transform nozzle;
     [SerializeField] Transform target;
+    [SerializeField] Transform averageRopeTarget;  // A transform meant to be kept at the average position of the rope. Used for AI targeting.
 
     [Space, Header("Rope Properties")]
 
@@ -42,11 +43,20 @@ public class VerletRope : MonoBehaviour
     void Update()
     {
         this.DrawRope();
+        this.UpdateAverageRopeTransform();
     }
 
     private void FixedUpdate()
     {
         this.Simulate();
+    }
+
+    private void UpdateAverageRopeTransform() {
+        Vector2 allPoints = Vector2.zero;
+        for (int i = 0; i < ropeSegments.Count; i++) {
+            allPoints += ropeSegments[i].posNow;
+        }
+        averageRopeTarget.position = allPoints / ropeSegments.Count;
     }
 
     private void Simulate()
@@ -73,13 +83,17 @@ public class VerletRope : MonoBehaviour
 
     private void ApplyConstraint()
     {
-        RopeSegment firstSegment = this.ropeSegments[0];
-        firstSegment.posNow = nozzle.position;
-        this.ropeSegments[0] = firstSegment;
+        if (nozzle != null) {
+            RopeSegment firstSegment = this.ropeSegments[0];
+            firstSegment.posNow = nozzle.position;
+            this.ropeSegments[0] = firstSegment;
+        }
 
-        RopeSegment lastSegment = this.ropeSegments[segmentCount - 1];
-        lastSegment.posNow = target.position;
-        this.ropeSegments[segmentCount - 1] = lastSegment;
+        if (target != null) {
+            RopeSegment lastSegment = this.ropeSegments[segmentCount - 1];
+            lastSegment.posNow = target.position;
+            this.ropeSegments[segmentCount - 1] = lastSegment;
+        }
 
         for (int i = 0; i < this.segmentCount - 1; i++)
         {
@@ -135,6 +149,17 @@ public class VerletRope : MonoBehaviour
         edgeCollider.offset = transform.position * -1.0f;  
         edgeCollider.edgeRadius = ropeWidth / 2.0f;
         edgeCollider.points = ropePositions2D;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (other.gameObject.tag == GlobalVariables.FISH_TAG) {
+            // TODO: Cut the rope.
+        }
+    }
+
+    private void CutRope() {
+        // Create two new ropes. The first will have the nozzle position set, the second will have the target position set.
+        // The number of segments to create will depend on the position at which the rope was cut.
     }
 
     public struct RopeSegment

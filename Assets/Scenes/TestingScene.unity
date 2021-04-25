@@ -827,6 +827,12 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!95 &81880785 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 81880785, guid: 3c0ff4ac61da88043befb5803636036b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3683846825694685760}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &119207177
 GameObject:
   m_ObjectHideFlags: 0
@@ -2656,7 +2662,7 @@ GameObject:
   - component: {fileID: 603933706}
   - component: {fileID: 603933705}
   - component: {fileID: 603933704}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3076,7 +3082,7 @@ GameObject:
   - component: {fileID: 656935178}
   - component: {fileID: 656935179}
   - component: {fileID: 656935177}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Tether
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3111,6 +3117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nozzle: {fileID: 808354086}
   target: {fileID: 603933703}
+  averageRopeTarget: {fileID: 656935176}
   ropeWidth: 0.1
   segmentCount: 36
   ropeLength: 4
@@ -6398,6 +6405,56 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1891083912, guid: 3c0ff4ac61da88043befb5803636036b, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 656935176}
+    - target: {fileID: 1891083912, guid: 3c0ff4ac61da88043befb5803636036b, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 81880785}
+    - target: {fileID: 1891083912, guid: 3c0ff4ac61da88043befb5803636036b, type: 3}
+      propertyPath: attackForce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1891083912, guid: 3c0ff4ac61da88043befb5803636036b, type: 3}
+      propertyPath: attackCooldown
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1891083912, guid: 3c0ff4ac61da88043befb5803636036b, type: 3}
+      propertyPath: windUpDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1891083912, guid: 3c0ff4ac61da88043befb5803636036b, type: 3}
+      propertyPath: movementThreshold
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1891083912, guid: 3c0ff4ac61da88043befb5803636036b, type: 3}
+      propertyPath: sightLayerMask.m_Bits
+      value: 264192
+      objectReference: {fileID: 0}
+    - target: {fileID: 1891083912, guid: 3c0ff4ac61da88043befb5803636036b, type: 3}
+      propertyPath: minLateralDistanceFromTarget
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1891083912, guid: 3c0ff4ac61da88043befb5803636036b, type: 3}
+      propertyPath: maxPositionDifferenceForAttack.x
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1891083912, guid: 3c0ff4ac61da88043befb5803636036b, type: 3}
+      propertyPath: maxPositionDifferenceForAttack.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3683846827229257290, guid: 3c0ff4ac61da88043befb5803636036b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Fish
+      objectReference: {fileID: 0}
+    - target: {fileID: 3683846827229257292, guid: 3c0ff4ac61da88043befb5803636036b,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3683846827579067591, guid: 3c0ff4ac61da88043befb5803636036b,
         type: 3}
       propertyPath: m_Name
@@ -6844,6 +6901,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Turtle
+      objectReference: {fileID: 0}
+    - target: {fileID: 6610700235268772881, guid: ab367bd394fd1e348b17901d4ac3bdd1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6610700235268772910, guid: ab367bd394fd1e348b17901d4ac3bdd1,
         type: 3}
