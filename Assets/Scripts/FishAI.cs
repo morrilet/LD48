@@ -33,6 +33,11 @@ public class FishAI : MonoBehaviour
         localRigidbody = GetComponent<Rigidbody2D>();
     }
 
+    private void Start() {
+        if (target == null)
+            target = GameManager.instance.tether.transform;
+    }
+
     private void Update() {
         if (target == null)
             return;
@@ -44,14 +49,10 @@ public class FishAI : MonoBehaviour
             MoveToTarget();
 
             // If we're at our destination we should begin an attack.
-            if ((nextPositionTarget - transform.position).magnitude <= movementThreshold) {
+            if ((nextPositionTarget - transform.position).magnitude <= movementThreshold || CanAttackFromPosition(transform.position)) {
                 StartCoroutine(PerformAttack());
             }
         }
-    }
-
-    private void FixedUpdate() {
-        // localRigidbody.velocity = directionToTarget.normalized * moveSpeed; 
     }
 
     private bool CanAttackFromPosition(Vector3 position) { 

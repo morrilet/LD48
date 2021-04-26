@@ -393,6 +393,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3683846827229257291}
   - component: {fileID: 3683846827229257292}
+  - component: {fileID: 314188296}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Fish
@@ -440,6 +441,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &314188296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3683846827229257290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d828517f1ac1cc8479fcf545f40f669f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3683846827579067591
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,7 +552,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 264192
   animator: {fileID: 81880785}
-  moveSpeed: 3
+  moveSpeed: 3.5
   windUpDuration: 1
   maxPositionDifferenceForAttack: {x: 8, y: 2}
   movementThreshold: 0.1

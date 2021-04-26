@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
@@ -16,7 +17,6 @@ public class LevelGenerator : MonoBehaviour
     Queue<GameObject> chunks;
     int totalSpawnedChunks;
 
-    // TODO: Switch this to the game managers tracked depth.
     float targetDistanceSinceLastChunk;
     float initialPositionTarget;
 
@@ -34,8 +34,7 @@ public class LevelGenerator : MonoBehaviour
 
     private void Update() {
         int newChunksSpawned = totalSpawnedChunks - chunkCount;  // How many chunks we've spawned, minus the initial ones.
-        float distanceFromStartPosition = Mathf.Abs(initialPositionTarget - target.position.y);  // How far the target has moved from the start position in total.
-        targetDistanceSinceLastChunk = distanceFromStartPosition - (newChunksSpawned * chunkHeight);
+        targetDistanceSinceLastChunk = GameManager.instance.playerDepth - (newChunksSpawned * chunkHeight);
 
         if (targetDistanceSinceLastChunk >= chunkHeight) {
             SpawnChunk();
@@ -53,6 +52,34 @@ public class LevelGenerator : MonoBehaviour
         if (chunks.Count > chunkCount) {
             GameObject oldestChunk = chunks.Dequeue();
             GameObject.Destroy(oldestChunk);
+        }
+
+        // Spawn enemies in the new chunk...
+        EnemySpawner[] spawners = newChunk.GetComponentsInChildren<EnemySpawner>();
+        
+        // Decide how many enemies to spawn based on player depth.
+        int maxSpawnersTriggered = 0;
+        if (GameManager.instance.playerDepth > GlobalVariables.TIER_2_DEPTH) 
+            maxSpawnersTriggered = 3;
+        if (GameManager.instance.playerDepth > GlobalVariables.TIER_1_DEPTH) 
+            maxSpawnersTriggered = 2;
+        if (GameManager.instance.playerDepth > GlobalVariables.TIER_0_DEPTH) 
+            maxSpawnersTriggered = 1;
+
+        // If we don't have enough spawners then just use them all.
+        if (maxSpawnersTriggered >= spawners.Length) {
+            foreach (EnemySpawner spawner in spawners) {
+                spawner.Spawn();
+            }
+        } else {
+            // Shuffle the spawner list.
+            System.Random random = new System.Random();
+            spawners = spawners.OrderBy(item => random.Next()).ToArray();
+
+            // Spawn from the first however many.
+            for (int i = 0; i < maxSpawnersTriggered; i++) {
+                spawners[i].Spawn();
+            }
         }
 
         totalSpawnedChunks++;
