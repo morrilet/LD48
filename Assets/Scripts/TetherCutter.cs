@@ -6,8 +6,8 @@ public class TetherCutter : MonoBehaviour
 {
     private void OnCollisionEnter2D(Collision2D other) {
 
-        Debug.Log(other.gameObject);
-        
+        Debug.Log(this.gameObject.name);
+
         if (other.gameObject.tag == GlobalVariables.TETHER_TAG) {
             VerletRope tether = other.gameObject.GetComponent<VerletRope>();
             tether.TryCutRope(other.contacts[0].point);

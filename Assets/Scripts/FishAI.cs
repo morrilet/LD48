@@ -89,8 +89,10 @@ public class FishAI : MonoBehaviour
         isAttacking = true;
         animator.SetTrigger("Windup");
         localRigidbody.velocity = Vector2.zero;
+        AudioManager.instance.PlayEffect(GlobalVariables.SFX_FISH_WINDUP);
 
         Vector2 targetPosition = target.position; // Cache this at the start of the attack.
+        targetPosition.y = transform.position.y;
 
         // TODO: Force windup time to stretch to fit windup duration.
         yield return new WaitForSeconds(windUpDuration);
@@ -98,6 +100,7 @@ public class FishAI : MonoBehaviour
         // TODO: Maybe disable main collider when attacking so we can pass through the tether...
         Vector2 force = ((Vector2)targetPosition - (Vector2)transform.position).normalized * attackForce;
         localRigidbody.AddForce(force, ForceMode2D.Impulse);
+        AudioManager.instance.PlayEffect(GlobalVariables.SFX_FISH_ATTACK);
 
         yield return new WaitForSeconds(attackCooldown);
 

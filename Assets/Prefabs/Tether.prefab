@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6033267245521318080}
   - component: {fileID: 6033267245521318081}
   - component: {fileID: 6033267245521318083}
-  m_Layer: 11
+  m_Layer: 10
   m_Name: Tether
   m_TagString: Tether
   m_Icon: {fileID: 0}

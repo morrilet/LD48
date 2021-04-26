@@ -205,6 +205,7 @@ public class VerletRope : MonoBehaviour
         newRopeBottom.nozzle = null;
         newRopeBottom.target = target;
 
+        GameManager.instance.KillPlayer();
         GameObject.Destroy(this.gameObject);
     }
 

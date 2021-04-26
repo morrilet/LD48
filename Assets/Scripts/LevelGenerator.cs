@@ -34,7 +34,7 @@ public class LevelGenerator : MonoBehaviour
 
     private void Update() {
         int newChunksSpawned = totalSpawnedChunks - chunkCount;  // How many chunks we've spawned, minus the initial ones.
-        targetDistanceSinceLastChunk = GameManager.instance.playerDepth - (newChunksSpawned * chunkHeight);
+        targetDistanceSinceLastChunk = GameManager.instance.rawPlayerDepth - (newChunksSpawned * chunkHeight);
 
         if (targetDistanceSinceLastChunk >= chunkHeight) {
             SpawnChunk();
@@ -54,8 +54,17 @@ public class LevelGenerator : MonoBehaviour
             GameObject.Destroy(oldestChunk);
         }
 
-        // Spawn enemies in the new chunk...
-        EnemySpawner[] spawners = newChunk.GetComponentsInChildren<EnemySpawner>();
+        // Spawn enemies in the new chunk
+        SpawnEnemies(newChunk);
+
+        // Spawn spikes in the new chunk
+        SpawnSpikes(newChunk);
+
+        totalSpawnedChunks++;
+    }
+
+    private void SpawnEnemies(GameObject chunk) {
+        EnemySpawner[] spawners = chunk.GetComponentsInChildren<EnemySpawner>();
         
         // Decide how many enemies to spawn based on player depth.
         int maxSpawnersTriggered = 0;
@@ -81,8 +90,34 @@ public class LevelGenerator : MonoBehaviour
                 spawners[i].Spawn();
             }
         }
+    }
 
-        totalSpawnedChunks++;
+    private void SpawnSpikes(GameObject chunk) {
+        TetherCutter[] spikes = chunk.GetComponentsInChildren<TetherCutter>();
+        
+        // Decide how many enemies to allow based on player depth.
+        int maxSpikesAllowed = 0;
+        if (GameManager.instance.playerDepth > GlobalVariables.TIER_2_DEPTH) 
+            maxSpikesAllowed = 3;
+        if (GameManager.instance.playerDepth > GlobalVariables.TIER_1_DEPTH) 
+            maxSpikesAllowed = 2;
+        if (GameManager.instance.playerDepth > GlobalVariables.TIER_0_DEPTH) 
+            maxSpikesAllowed = 1;
+
+        if (maxSpikesAllowed >= spikes.Length) {
+            foreach (TetherCutter spike in spikes) {
+                spike.gameObject.SetActive(true);
+            }
+        } else {
+            // Shuffle the spike list.
+            System.Random random = new System.Random();
+            spikes = spikes.OrderBy(item => random.Next()).ToArray();
+
+            // Set active on the first however many spikes to true, false on the others.
+            for (int i = 0; i < spikes.Length; i++) {
+                spikes[i].gameObject.SetActive(i < maxSpikesAllowed);
+            }
+        }
     }
 
     private GameObject GetRandomChunk() {

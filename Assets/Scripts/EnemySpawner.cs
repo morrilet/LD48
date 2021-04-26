@@ -19,8 +19,6 @@ public class EnemySpawner : MonoBehaviour
     }
 
     public void Spawn() {
-        Debug.Log("SPAWNING");
-
         // When we spawn from the level generator we call it too early. This lets us wait until we've instantiated.
         shouldSpawn = true;
     }

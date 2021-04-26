@@ -13,6 +13,7 @@ public class TurtleAI : MonoBehaviour
     [SerializeField] LayerMask sensorMask;
     [SerializeField] Animator animator;
     [SerializeField] float attackDuration;
+    [SerializeField] float stunDuration;
 
     [Space, Header("Debugging")]
 
@@ -64,8 +65,15 @@ public class TurtleAI : MonoBehaviour
 
     private IEnumerator Attack() {
         localRigidbody.velocity = Vector2.zero;
+        animator.SetFloat("Speed", 0.0f);
         animator.SetTrigger("Attack");
         isAttacking = true;
+        direction = Mathf.Sign((GameManager.instance.player.transform.position - transform.position).x);
+        GameManager.instance.StunPlayer(transform.position, stunDuration);
+        
+        Vector3 scale = startScale;
+        scale.x *= direction * -1.0f;
+        transform.localScale = scale;
 
         yield return new WaitForSeconds(attackDuration);
 

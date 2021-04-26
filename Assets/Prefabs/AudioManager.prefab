@@ -1,0 +1,152 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8381177067915297700
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7334130064709948918}
+  - component: {fileID: 6975124471217784199}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7334130064709948918
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8381177067915297700}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.022667177, y: 0.037457783, z: -0.018497081}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6975124471217784199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8381177067915297700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e83ea6b2e6c623b47a011b41174c76c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  masterMusicVolume: 0.75
+  masterEffectVolume: 1
+  audioClips:
+  - name: Music_Track_0
+    clip: {fileID: 8300000, guid: 7c5a3979508d3bf48b6655361a00228e, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 1
+    useDepthEnable: 0
+    depthEnabledStart: 0
+    depthEnabledEnd: 0
+  - name: Music_Track_1
+    clip: {fileID: 8300000, guid: 8f1d2b9aae9575740adc67dac5c5d480, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 1
+    useDepthEnable: 1
+    depthEnabledStart: 20
+    depthEnabledEnd: 40
+  - name: Music_Track_2
+    clip: {fileID: 8300000, guid: a8492afcd4176ed4f8c97372b10333e3, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 1
+    useDepthEnable: 1
+    depthEnabledStart: 80
+    depthEnabledEnd: 100
+  - name: Music_Track_3
+    clip: {fileID: 8300000, guid: 039b2ce8a7e2e6143af3adc5d9bda19a, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 1
+    useDepthEnable: 1
+    depthEnabledStart: 180
+    depthEnabledEnd: 200
+  - name: Music_Track_4
+    clip: {fileID: 8300000, guid: f48282750f4d5784a899f436d80f18cc, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 1
+    useDepthEnable: 1
+    depthEnabledStart: 300
+    depthEnabledEnd: 320
+  - name: Music_Track_5
+    clip: {fileID: 8300000, guid: 07ce46eb817eb424b8ae62408220a680, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 1
+    useDepthEnable: 1
+    depthEnabledStart: 500
+    depthEnabledEnd: 520
+  - name: Music_Track_6
+    clip: {fileID: 8300000, guid: c42073b4a4fae474e805fc07225dba24, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 1
+    useDepthEnable: 1
+    depthEnabledStart: 830
+    depthEnabledEnd: 850
+  - name: FishAttack
+    clip: {fileID: 8300000, guid: e5a974a8d2a15404e8db92d1e41c80c9, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 0
+    useDepthEnable: 0
+    depthEnabledStart: 0
+    depthEnabledEnd: 0
+  - name: FishWindup
+    clip: {fileID: 8300000, guid: fdda350861ad3db4485ad39d8c3fc264, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 0
+    useDepthEnable: 0
+    depthEnabledStart: 0
+    depthEnabledEnd: 0
+  - name: PlayerHit
+    clip: {fileID: 8300000, guid: c2f18c5da1ef3f1488485204c5bf9115, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 0
+    useDepthEnable: 0
+    depthEnabledStart: 0
+    depthEnabledEnd: 0
+  - name: PlayerJump
+    clip: {fileID: 8300000, guid: 5a07562976d23444e9efef87271eff6b, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 0
+    useDepthEnable: 0
+    depthEnabledStart: 0
+    depthEnabledEnd: 0
+  - name: PlayerStep
+    clip: {fileID: 8300000, guid: 8bbdc4c82219a25449c1675b8481d82d, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 0
+    useDepthEnable: 0
+    depthEnabledStart: 0
+    depthEnabledEnd: 0
+  - name: PlayerSlide
+    clip: {fileID: 8300000, guid: 3484bbac7e8cafb439c21f1b30fa8ac8, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 1
+    isMusic: 0
+    useDepthEnable: 0
+    depthEnabledStart: 0
+    depthEnabledEnd: 0

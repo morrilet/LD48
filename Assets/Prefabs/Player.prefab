@@ -205,6 +205,8 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   slideVelocityScaleDuration: 3
+  stunVelocityDampening: 0.9
+  stunForce: 3
   collisionLayers:
     serializedVersion: 2
     m_Bits: 262144

@@ -17,12 +17,12 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Tether
   - Player
   - Enemy
-  - 
-  - 
-  - 
+  - Turtle
+  - Fish
+  - Spike
   - 
   - 
   - LevelGeometry
@@ -40,17 +40,23 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 883659187
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
   - name: Tiles
     uniqueID: 3800388115
     locked: 0
+  - name: Turtle
+    uniqueID: 3917116767
+    locked: 0
   - name: Tether
     uniqueID: 2908426231
     locked: 0
-  - name: Turtle
-    uniqueID: 3917116767
+  - name: Spike
+    uniqueID: 2493571431
     locked: 0
   - name: Fish
     uniqueID: 2655008771

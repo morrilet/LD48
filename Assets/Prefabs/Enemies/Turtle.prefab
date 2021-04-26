@@ -74,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -377850529
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 3e67f410ecb86ed45b340775c58791d6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -156,7 +156,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -377850529
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 6d9dacb5dc1808b46b9555a0d307099d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -238,7 +238,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -377850529
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: fdb8b2cb9e268774691b3cdb46f4823e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -320,7 +320,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -377850529
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 6d9dacb5dc1808b46b9555a0d307099d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -345,7 +345,8 @@ GameObject:
   - component: {fileID: 1143873122}
   - component: {fileID: 1143873120}
   - component: {fileID: 1143873121}
-  m_Layer: 0
+  - component: {fileID: -5826680118428436825}
+  m_Layer: 13
   m_Name: Turtle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -435,7 +436,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 262144
   animator: {fileID: 1569791948}
-  debug: 1
+  attackDuration: 2.5
+  stunDuration: 2
+  debug: 0
+--- !u!114 &-5826680118428436825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6610700235268772881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdfb03acea0763b49ad96911600d21ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distanceLimit: 25
 --- !u!1 &6610700235442400510
 GameObject:
   m_ObjectHideFlags: 0
@@ -505,7 +521,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -377850529
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: e8f5d40cd5a4a5c41a5226bed0c292d5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -638,7 +654,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -377850529
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: 7e4a23cc4695c594394a18a97180979e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

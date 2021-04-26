@@ -16,6 +16,8 @@ public class CharacterController_Platformer : MonoBehaviour
     public float jumpGravityScaleDuration;  // How long the gravity scale is altered after a jump.
     public AnimationCurve slideVelocityScaleFalloff;  // How forceful gravity is while wall-sliding.
     public float slideVelocityScaleDuration;  // How long the gravity scale is altered during a slide.
+    public float stunVelocityDampening;  // Dampening value to apply to velocity when we're stunned.
+    public float stunForce;  // The force with which we're thrown back when stunned.
 
     [Space, Header("Technical Details")]
 
@@ -47,6 +49,11 @@ public class CharacterController_Platformer : MonoBehaviour
     float wallSlideDirection;  // -1 or 1, depending on the direction we were moving when we initiated the slide.
     float currentTerminalVelocity;
     float currentDirection = 1;
+    bool isStunned;
+    float stunTimer;
+    float stunDuration;
+    Vector2 stunVector;
+    bool isDead;
 
     private void Awake()
     {
@@ -63,6 +70,11 @@ public class CharacterController_Platformer : MonoBehaviour
     {
         InputManager.InputData input = localInputManager.GetInput();
         Vector2 velocity = Vector2.zero;
+
+        if (isStunned) {
+            HandleStun();
+            return;
+        }
 
 # region Specialized Collision Detection
         // Stored velocity used *after* `TryMoveDirection()` is actually the *current* velocity after it has been applied.
@@ -110,15 +122,20 @@ public class CharacterController_Platformer : MonoBehaviour
             wallSlideDirection = Mathf.Sign(storedVelocity.x);
             slideVelocityFalloffTimer = 0.0f;
             currentTerminalVelocity = terminalSlideVelocity;
+            AudioManager.instance.PlayEffect(GlobalVariables.SFX_PLAYER_WALL_SLIDE);
         }
 
         // Stop wall sliding if we're not touching the wall.
-        if (!touchingWall && wallSliding)
+        if (!touchingWall && wallSliding) {
             wallSliding = false;
+            AudioManager.instance.StopEffect(GlobalVariables.SFX_PLAYER_WALL_SLIDE);
+        }
 
         // Stop wall sliding if we touch the ground.
-        if (!inAir)
+        if (!inAir && wallSliding) {
+            AudioManager.instance.StopEffect(GlobalVariables.SFX_PLAYER_WALL_SLIDE);
             wallSliding = false;
+        }
 
         if (wallSliding) {
             float slideGravityPercent = Mathf.Clamp01(slideVelocityFalloffTimer / slideVelocityScaleDuration);
@@ -139,8 +156,10 @@ public class CharacterController_Platformer : MonoBehaviour
         }
 # endregion
         
-        velocity += TryMoveDirection(input.movementInput.x);
-        velocity += TryJump(input.jumpButtonDown);
+        if (!isDead) {
+            velocity += TryMoveDirection(input.movementInput.x);
+            velocity += TryJump(input.jumpButtonDown);
+        }
         velocity += ApplyGravity();
 
         (List<RaycastHit2D>, List<RaycastHit2D>) hits = PerformRaycasts(velocity * Time.deltaTime);
@@ -157,10 +176,12 @@ public class CharacterController_Platformer : MonoBehaviour
         characterAnimator.SetFloat("Speed", Mathf.Abs(storedVelocity.x));
         characterAnimator.SetBool("InAir", inAir);
         characterAnimator.SetBool("WallSliding", wallSliding);
+        characterAnimator.SetBool("Stunned", isStunned);
+        characterAnimator.SetBool("Dead", isDead);
 
         // Flip the character based on movement direction.
         if (storedVelocity.x != 0)
-            currentDirection = Mathf.Sign(storedVelocity.x);
+            currentDirection = Mathf.Sign(storedVelocity.x) * (isStunned ? -1.0f : 1.0f);
         Vector3 scale = playerSpriteObj.transform.localScale;
         scale.x = currentDirection;
         playerSpriteObj.transform.localScale = scale;
@@ -176,6 +197,7 @@ public class CharacterController_Platformer : MonoBehaviour
             jumping = true;
             jumpGravityFalloffTimer = 0.0f;
             characterAnimator.SetTrigger("Jump");
+            AudioManager.instance.PlayEffect(GlobalVariables.SFX_PLAYER_JUMP);
         }
         return velocity;
     }
@@ -196,6 +218,37 @@ public class CharacterController_Platformer : MonoBehaviour
             )
         );
         return velocity;
+    }
+
+    public void Stun(Vector3 sourcePosition, float duration) {
+        stunTimer = 0.0f;
+        isStunned = true;
+        stunDuration = duration;
+        characterAnimator.SetTrigger("JustStunned");
+        stunVector = (Mathf.Sign((transform.position - sourcePosition).x) * Vector3.right + (Vector3.up / 2.0f)).normalized * stunForce;
+        AudioManager.instance.PlayEffect(GlobalVariables.SFX_PLAYER_HIT);
+    }
+
+    public void Die() {
+        isDead = true;
+        AudioManager.instance.StopEffect(GlobalVariables.SFX_PLAYER_WALL_SLIDE);  // Just in case...
+    }
+
+    private void HandleStun() {
+        if (stunTimer >= stunDuration) {
+            isStunned = false;
+            return;
+        }
+
+        Vector2 velocity = stunVector;
+        velocity.y *= Mathf.Lerp(1.0f, -1.0f, stunTimer / stunDuration);  // Shitty parabola code b/c gravity isn't cooperating.
+        (List<RaycastHit2D>, List<RaycastHit2D>) hits = PerformRaycasts(velocity * Time.deltaTime);
+        transform.position += (Vector3)PerformMove(hits, velocity * Time.deltaTime);
+
+        storedVelocity = velocity;
+        stunTimer += Time.deltaTime;
+
+        UpdateAnimator();
     }
 
     /// <summary>
