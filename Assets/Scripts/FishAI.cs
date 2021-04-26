@@ -34,6 +34,9 @@ public class FishAI : MonoBehaviour
     }
 
     private void Update() {
+        if (target == null)
+            return;
+
         directionToTarget = target.position - transform.position;  
 
         if (!isAttacking) {

@@ -395,7 +395,7 @@ GameObject:
   - component: {fileID: 3683846827229257292}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -424,7 +424,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -535,5 +535,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   spriteObj: {fileID: 3683846825629584527}
+  sightLayerMask:
+    serializedVersion: 2
+    m_Bits: 264192
+  animator: {fileID: 81880785}
   moveSpeed: 3
+  windUpDuration: 1
+  maxPositionDifferenceForAttack: {x: 8, y: 2}
+  movementThreshold: 0.1
+  minLateralDistanceFromTarget: 2
+  attackForce: 10
+  attackCooldown: 3
   debug: 1

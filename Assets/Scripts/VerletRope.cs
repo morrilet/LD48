@@ -17,25 +17,35 @@ public class VerletRope : MonoBehaviour
     [SerializeField] float ropeWidth = 0.1f;
     [SerializeField] int segmentCount = 35;
     [SerializeField] float ropeLength;
+    [SerializeField] GameObject tetherPrefab;
+    [SerializeField] bool cuttable = true;
 
     LineRenderer lineRenderer;
     EdgeCollider2D edgeCollider;
     List<RopeSegment> ropeSegments = new List<RopeSegment>();
     float segmentLength;
 
+    // Okay, I know nozzle vs. target is confusing. Think of it as start vs. end.
+
     // Use this for initialization
     void Start()
     {
+        bool reverseRopeGeneration = target != null && nozzle == null;
+        if (reverseRopeGeneration) {
+            nozzle = target;
+            target = null;
+        }
+
         this.lineRenderer = this.GetComponent<LineRenderer>();
         edgeCollider = this.GetComponent<EdgeCollider2D>();
-        Vector3 ropeStartPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 ropeStartPoint = nozzle.position;
 
         segmentLength = ropeLength / segmentCount;
 
         for (int i = 0; i < segmentCount; i++)
         {
             this.ropeSegments.Add(new RopeSegment(ropeStartPoint));
-            ropeStartPoint.y -= segmentLength;
+            ropeStartPoint.y = reverseRopeGeneration ? ropeStartPoint.y + segmentLength : ropeStartPoint.y - segmentLength;
         }
     }
 
@@ -43,7 +53,9 @@ public class VerletRope : MonoBehaviour
     void Update()
     {
         this.DrawRope();
-        this.UpdateAverageRopeTransform();
+
+        if (averageRopeTarget != null)
+            this.UpdateAverageRopeTransform();
     }
 
     private void FixedUpdate()
@@ -83,7 +95,7 @@ public class VerletRope : MonoBehaviour
 
     private void ApplyConstraint()
     {
-        if (nozzle != null) {
+        if (nozzle != null){
             RopeSegment firstSegment = this.ropeSegments[0];
             firstSegment.posNow = nozzle.position;
             this.ropeSegments[0] = firstSegment;
@@ -151,15 +163,49 @@ public class VerletRope : MonoBehaviour
         edgeCollider.points = ropePositions2D;
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
-        if (other.gameObject.tag == GlobalVariables.FISH_TAG) {
-            // TODO: Cut the rope.
-        }
-    }
+    // Can't really do this because the parent rigidbody of the fish means we're always going
+    // to see the parent object, not the child, so we can't be sure we're hitting the spear.
+    // private void OnCollisionEnter2D(Collision2D other) {
+    //     Debug.Log(other.otherCollider.gameObject.tag);
+    //     if (other.gameObject.tag == GlobalVariables.FISH_TAG && cuttable) {
+    //         if (cuttable) {
+    //             CutRope(other.GetContact(0).point);
+    //         }
+    //     }
+    // }
 
-    private void CutRope() {
-        // Create two new ropes. The first will have the nozzle position set, the second will have the target position set.
+    public void TryCutRope(Vector2 position) {
+        // Create two new ropes. They'll each have their nozzle position set but no target.
         // The number of segments to create will depend on the position at which the rope was cut.
+
+        if (!cuttable)
+            return;
+
+        int segmentsFromTop = 0;
+        for (int i = 0; i < ropeSegments.Count - 1; i++) {
+            if (ropeSegments[i].posNow.y > position.y && ropeSegments[i + 1].posNow.y < position.y) {
+                segmentsFromTop = i;
+                break;
+            }
+        }
+
+        VerletRope newRopeTop = GameObject.Instantiate(tetherPrefab).GetComponent<VerletRope>();
+        newRopeTop.ropeLength = segmentsFromTop * segmentLength;
+        newRopeTop.segmentCount = segmentsFromTop;
+        newRopeTop.averageRopeTarget = null;
+        newRopeTop.cuttable = false;
+        newRopeTop.nozzle = nozzle;
+        newRopeTop.target = null;
+
+        VerletRope newRopeBottom = GameObject.Instantiate(tetherPrefab).GetComponent<VerletRope>();
+        newRopeBottom.ropeLength = ropeLength - (segmentsFromTop * segmentLength);
+        newRopeBottom.segmentCount = segmentCount - segmentsFromTop;
+        newRopeBottom.averageRopeTarget = null;
+        newRopeBottom.cuttable = false;
+        newRopeBottom.nozzle = null;
+        newRopeBottom.target = target;
+
+        GameObject.Destroy(this.gameObject);
     }
 
     public struct RopeSegment
