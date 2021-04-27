@@ -34,7 +34,7 @@ public class FishAI : MonoBehaviour
     }
 
     private void Start() {
-        if (target == null)
+        if (target == null && GameManager.instance.tether != null)
             target = GameManager.instance.tether.transform;
     }
 

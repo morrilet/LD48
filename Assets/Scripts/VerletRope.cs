@@ -19,11 +19,13 @@ public class VerletRope : MonoBehaviour
     [SerializeField] float ropeLength;
     [SerializeField] GameObject tetherPrefab;
     [SerializeField] bool cuttable = true;
+    [SerializeField] GameObject cutRopeParticles;
 
     LineRenderer lineRenderer;
     EdgeCollider2D edgeCollider;
     List<RopeSegment> ropeSegments = new List<RopeSegment>();
     float segmentLength;
+    Transform currentParticleTransform;  // The current cut rope particle transform. Keep this locked on target.
 
     // Okay, I know nozzle vs. target is confusing. Think of it as start vs. end.
 
@@ -47,6 +49,17 @@ public class VerletRope : MonoBehaviour
             this.ropeSegments.Add(new RopeSegment(ropeStartPoint));
             ropeStartPoint.y = reverseRopeGeneration ? ropeStartPoint.y + segmentLength : ropeStartPoint.y - segmentLength;
         }
+
+        // If we've been cut, show the particles at the proper position.
+        if (!cuttable) {
+            GameObject obj = GameObject.Instantiate(
+                cutRopeParticles, 
+                ropeSegments[segmentCount - 1].posNow, 
+                Quaternion.identity, 
+                transform
+            );
+            currentParticleTransform = obj.transform;
+        }
     }
 
     // Update is called once per frame
@@ -59,8 +72,10 @@ public class VerletRope : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {
-        this.Simulate();
+    {  
+        if (ropeSegments.Count > 0) {
+            this.Simulate();
+        }
     }
 
     private void UpdateAverageRopeTransform() {
@@ -161,6 +176,11 @@ public class VerletRope : MonoBehaviour
         edgeCollider.offset = transform.position * -1.0f;  
         edgeCollider.edgeRadius = ropeWidth / 2.0f;
         edgeCollider.points = ropePositions2D;
+
+        // If we have some particles we need to keep them locked to the end of the rope.
+        if (currentParticleTransform != null) {
+            currentParticleTransform.position = ropePositions3D[segmentCount - 1];
+        }
     }
 
     // Can't really do this because the parent rigidbody of the fish means we're always going
@@ -191,6 +211,7 @@ public class VerletRope : MonoBehaviour
 
         VerletRope newRopeTop = GameObject.Instantiate(tetherPrefab).GetComponent<VerletRope>();
         newRopeTop.ropeLength = segmentsFromTop * segmentLength;
+        newRopeTop.cutRopeParticles = cutRopeParticles;
         newRopeTop.segmentCount = segmentsFromTop;
         newRopeTop.averageRopeTarget = null;
         newRopeTop.cuttable = false;
@@ -200,6 +221,7 @@ public class VerletRope : MonoBehaviour
         VerletRope newRopeBottom = GameObject.Instantiate(tetherPrefab).GetComponent<VerletRope>();
         newRopeBottom.ropeLength = ropeLength - (segmentsFromTop * segmentLength);
         newRopeBottom.segmentCount = segmentCount - segmentsFromTop;
+        newRopeBottom.cutRopeParticles = cutRopeParticles;
         newRopeBottom.averageRopeTarget = null;
         newRopeBottom.cuttable = false;
         newRopeBottom.nozzle = null;

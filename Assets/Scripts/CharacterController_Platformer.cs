@@ -26,9 +26,10 @@ public class CharacterController_Platformer : MonoBehaviour
     [SerializeField, Range(2, 64)] int verticalRaycastCount = 2;  // The number of rays to cast from the top / bottom of the controller.
     [SerializeField, Range(2, 64)] int horizontalRaycastCount = 2;  // The number of rays to case from the left / right of the controller.
 
-    [Space, Header("Animation")]
+    [Space, Header("Animation and Effects")]
     [SerializeField] GameObject playerSpriteObj;
     [SerializeField] Animator characterAnimator;
+    [SerializeField] ParticleSystem wallSlideParticles;
 
     [Space, Header("Debugging")]
 
@@ -64,6 +65,7 @@ public class CharacterController_Platformer : MonoBehaviour
         storedHits = PerformRaycasts(storedVelocity);
 
         currentTerminalVelocity = terminalVelocity;
+        wallSlideParticles.Stop();
     }
 
     private void Update()
@@ -122,19 +124,25 @@ public class CharacterController_Platformer : MonoBehaviour
             wallSlideDirection = Mathf.Sign(storedVelocity.x);
             slideVelocityFalloffTimer = 0.0f;
             currentTerminalVelocity = terminalSlideVelocity;
+
+            wallSlideParticles.Play();
             AudioManager.instance.PlayEffect(GlobalVariables.SFX_PLAYER_WALL_SLIDE);
         }
 
         // Stop wall sliding if we're not touching the wall.
         if (!touchingWall && wallSliding) {
             wallSliding = false;
+
+            wallSlideParticles.Stop();
             AudioManager.instance.StopEffect(GlobalVariables.SFX_PLAYER_WALL_SLIDE);
         }
 
         // Stop wall sliding if we touch the ground.
         if (!inAir && wallSliding) {
-            AudioManager.instance.StopEffect(GlobalVariables.SFX_PLAYER_WALL_SLIDE);
             wallSliding = false;
+
+            wallSlideParticles.Stop();
+            AudioManager.instance.StopEffect(GlobalVariables.SFX_PLAYER_WALL_SLIDE);
         }
 
         if (wallSliding) {
@@ -213,7 +221,7 @@ public class CharacterController_Platformer : MonoBehaviour
     public Vector2 ApplyGravity() {
         Vector2 velocity = new Vector2(
             0.0f, Mathf.Clamp(
-                storedVelocity.y + (GlobalVariables.GRAVITY * gravityScale), 
+                storedVelocity.y + (GlobalVariables.GRAVITY * gravityScale * Time.deltaTime), 
                 -currentTerminalVelocity, Mathf.Infinity
             )
         );
@@ -231,7 +239,11 @@ public class CharacterController_Platformer : MonoBehaviour
 
     public void Die() {
         isDead = true;
-        AudioManager.instance.StopEffect(GlobalVariables.SFX_PLAYER_WALL_SLIDE);  // Just in case...
+        AudioManager.instance.PlayEffect(GlobalVariables.SFX_PLAYER_DIE);
+
+        // Just in case...
+        wallSlideParticles.Stop();
+        AudioManager.instance.StopEffect(GlobalVariables.SFX_PLAYER_WALL_SLIDE); 
     }
 
     private void HandleStun() {
@@ -245,7 +257,7 @@ public class CharacterController_Platformer : MonoBehaviour
         (List<RaycastHit2D>, List<RaycastHit2D>) hits = PerformRaycasts(velocity * Time.deltaTime);
         transform.position += (Vector3)PerformMove(hits, velocity * Time.deltaTime);
 
-        storedVelocity = velocity;
+        storedVelocity = velocity * Time.deltaTime;
         stunTimer += Time.deltaTime;
 
         UpdateAnimator();

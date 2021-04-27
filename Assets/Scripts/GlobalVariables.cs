@@ -19,6 +19,7 @@ public class GlobalVariables : MonoBehaviour
     public const string SFX_PLAYER_HIT = "PlayerHit";
     public const string SFX_PLAYER_JUMP = "PlayerJump";
     public const string SFX_PLAYER_WALL_SLIDE = "PlayerSlide";
+    public const string SFX_PLAYER_DIE = "PlayerDie";
     public const string SFX_FISH_WINDUP = "FishWindup";
     public const string SFX_FISH_ATTACK = "FishAttack";
 

@@ -150,3 +150,11 @@ MonoBehaviour:
     useDepthEnable: 0
     depthEnabledStart: 0
     depthEnabledEnd: 0
+  - name: PlayerDie
+    clip: {fileID: 8300000, guid: f0b27529c6a7e3849b9f69ae5e305847, type: 3}
+    source: {fileID: 0}
+    isLoopingEffect: 0
+    isMusic: 0
+    useDepthEnable: 0
+    depthEnabledStart: 0
+    depthEnabledEnd: 0

@@ -46,14 +46,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Tether
+    uniqueID: 2908426231
+    locked: 0
   - name: Tiles
     uniqueID: 3800388115
     locked: 0
   - name: Turtle
     uniqueID: 3917116767
-    locked: 0
-  - name: Tether
-    uniqueID: 2908426231
     locked: 0
   - name: Spike
     uniqueID: 2493571431
@@ -63,4 +63,7 @@ TagManager:
     locked: 0
   - name: PlayerSprite
     uniqueID: 3684689685
+    locked: 0
+  - name: Foreground
+    uniqueID: 3504694849
     locked: 0

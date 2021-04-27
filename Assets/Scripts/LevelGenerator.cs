@@ -69,11 +69,11 @@ public class LevelGenerator : MonoBehaviour
         // Decide how many enemies to spawn based on player depth.
         int maxSpawnersTriggered = 0;
         if (GameManager.instance.playerDepth > GlobalVariables.TIER_2_DEPTH) 
-            maxSpawnersTriggered = 3;
+            maxSpawnersTriggered = 6;
         if (GameManager.instance.playerDepth > GlobalVariables.TIER_1_DEPTH) 
-            maxSpawnersTriggered = 2;
+            maxSpawnersTriggered = 4;
         if (GameManager.instance.playerDepth > GlobalVariables.TIER_0_DEPTH) 
-            maxSpawnersTriggered = 1;
+            maxSpawnersTriggered = 2;
 
         // If we don't have enough spawners then just use them all.
         if (maxSpawnersTriggered >= spawners.Length) {

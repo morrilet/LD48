@@ -71,7 +71,7 @@ LineRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1386541065
-  m_SortingLayer: 2
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
@@ -173,3 +173,5 @@ MonoBehaviour:
   ropeLength: 4
   tetherPrefab: {fileID: 6033267245521318093}
   cuttable: 1
+  cutRopeParticles: {fileID: 778676230977050932, guid: bed4ffa2cb3b8524493561378bae3fd2,
+    type: 3}
